@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sameer Patil(Task_Api_JS):Direct-i</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="general.css">
+    <style type="text/css">
+        .search{height:34px;border:none;padding:6px;width:100%;-webkit-box-shadow: 1px 1px 5px 1px rgba(0,0,0,0.15);-moz-box-shadow: 1px 1px 5px 1px rgba(0,0,0,0.15);box-shadow: 1px 1px 5px 1px rgba(0,0,0,0.15);margin:30px 0px;outline:0;}
+			p.overview{height:200px;font-size: 13px;}
+    </style>
+</head>
+<body>
+<script>
+    $(document).ready(function() {
+        $.ajax({
+            type: "get",
+            url: "https://api.themoviedb.org/3/discover/movie?api_key=c7388513cfa8d4345fa10d4e8d4e3f7e&language=en-US&with_genres=18&primary_release_year=2018&page=1",
+            success: function(res) {
+                // console.log(res.results);
+                str = "";
+                cnt = 1;
+                $.each(res.results, function(a, b) {
+                    // console.log(b);
+                    if (cnt <= 10) {
+
+                        str = str + "<div class='col-md-3 col-xs-6 col-sm-6'>";
+                        str = str + "<h2 class='text-center'>" + b.original_title + "</h2>";
+                        str = str + "<img class='img-responsive' src='http://image.tmdb.org/t/p/w185" + b.poster_path + "'>";
+                        str = str + "<p class='text-justify overview '>" + b.overview + "</p>";
+                        str = str + "<p class='text-justify'>"+ b.release_date + "</p>";
+
+                        str = str + "</div>";
+                    }
+                    cnt++;
+                })
+                $(".results").html(str);
+            },
+            error: function(err_res) {
+                console.log(err_res);
+            }
+        })
+
+        $(".search").keyup(function() {
+            rec = $(this).val();
+            if (rec.length == 0) {
+                $.ajax({
+                    type: "get",
+                    url: "https://api.themoviedb.org/3/discover/movie?api_key=c7388513cfa8d4345fa10d4e8d4e3f7e&language=en-US&with_genres=18&primary_release_year=2018&page=1",
+                    success: function(res) {
+                        // console.log(res.results);
+                        str = "";
+                        cnt = 1;
+                        $.each(res.results, function(a, b) {
+                            // console.log(b);
+                            if (cnt <= 10) {
+                                str = str + "<div class='col-md-3 col-xs-6 col-sm-6'>";
+                                str = str + "<h2 class='text-center'>" + b.original_title + "</h2>";
+                                str = str + "<img class='img-responsive' src='http://image.tmdb.org/t/p/w185" + b.poster_path + "'>";
+                                str = str + "<p class='text-justify overview'>" + b.overview + "</p>";
+                                str = str + "<p class='text-justify'>" + b.release_date + "</p>";
+                                str = str + "</div>";
+
+                            }
+                            cnt++
+                        })
+                        $(".results").html(str);
+                    },
+                    error: function(err_res) {
+                        console.log(err_res);
+                    }
+                })
+            } else {
+                $.ajax({
+                    type: "get",
+                    url: "https://api.themoviedb.org/3/discover/movie?api_key=c7388513cfa8d4345fa10d4e8d4e3f7e&language=en-US&with_genres=18&primary_release_year=2018&page=1",
+                    success: function(res) {
+                        // console.log(res.results);
+                        str = "";
+
+                        $.each(res.results, function(a, b) {
+                            // console.log(b);
+                            if (rec == b.original_title) {
+                                str = str + "<div class='col-md-3 col-xs-6 col-sm-6'>";
+                                str = str + "<h2 class='text-center'>" + b.original_title + "</h2>";
+                                str = str + "<img class='img-responsive' src='http://image.tmdb.org/t/p/w185" + b.poster_path + "'>";
+                                str = str + "<p class='text-justify overview'>" + b.overview + "</p>";
+                                str = str + "<p class='text-justify'>" + b.release_date + "</p>";
+                                str = str + "</div>";
+                            }
+
+                        })
+                        $(".results").html(str);
+                    },
+                    error: function(err_res) {
+                        console.log(err_res);
+                    }
+                })
+            }
+
+        })
+    });
+</script>
+<div class="container">
+    <input type="text" class="search" placeholder="Search by Name: The Commuter">
+    <div class="results"></div>
+</div>
+</body>
+</html>
